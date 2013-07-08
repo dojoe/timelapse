@@ -30,7 +30,7 @@ So you recorded something using multiple cameras at once and want to make one vi
 
 I wrote two scripts for this situation -- one will normalize all images from one camera into a standardized time series with uniform time steps, the other will generate analog clocks like the script above, matching the time series.
 
-They were used to build [the timelapse video documenting our "Spr�hling" graffitti event](http://vimeo.com/45386061).
+They were used to build [the timelapse video documenting our "Sprühling" graffitti event](http://vimeo.com/45386061).
 
 The rough process I used was this:
 
