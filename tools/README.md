@@ -2,6 +2,8 @@ A few tools I hacked together for batch processing images for timelapse videos.
 
 The tools are released under the WTFPL (http://www.wtfpl.net/) in the hopes that someone else might find them useful some day.
 
+These tools require [Python 2.x](http://www.python.org/), [PIL](http://www.pythonware.com/products/pil/) and [ImageMagick](http://www.imagemagick.org/script/index.php) to work.
+
 
 Clocks from a simple timelapse
 ==============================
@@ -28,7 +30,7 @@ So you recorded something using multiple cameras at once and want to make one vi
 
 I wrote two scripts for this situation -- one will normalize all images from one camera into a standardized time series with uniform time steps, the other will generate analog clocks like the script above, matching the time series.
 
-They were used to build [the timelapse video documenting our "Sprühling" graffitti event](http://vimeo.com/45386061).
+They were used to build [the timelapse video documenting our "Sprï¿½hling" graffitti event](http://vimeo.com/45386061).
 
 The rough process I used was this:
 
