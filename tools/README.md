@@ -2,29 +2,33 @@ A few tools I hacked together for batch processing images for timelapse videos.
 
 The tools are released under the WTFPL (http://www.wtfpl.net/) in the hopes that someone else might find them useful some day.
 
-These tools require [Python 2.x](http://www.python.org/), [PIL](http://www.pythonware.com/products/pil/) and [ImageMagick](http://www.imagemagick.org/script/index.php) to work.
-
-
 Clocks from a simple timelapse
 ==============================
 
-Use clocks-from-images.py to generate the small clock you find in [my first Graffitti timelapse on Vimeo](http://vimeo.com/32865163). Here's the lowdown as written in the initial comment:
+`timelapse-tool.py` will take care of simple timelapses for you. It requires Python 3 and the `cairosvg` module. The latter is a little tricky to get working on Windows since it requires the Cairo libraries - the easiest (albeit messy) method is to grab a GTK2 runtime package from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer and unpack it to the directory you'll be running the tool from.
 
-Generate analog clock pictures from image timestamps.
+The tool currently has two functions:
 
-Program arguments: None whatsoever, everything is hardcoded.
+`timelapse-tool.py number-photos <dir>` will rename all images in `dir` into a number series, sorted by EXIF timestamp, for easy reading by AviSynth's `ImageSource`.
+`timelapse-tool.py clocks-from-photos <dir>` will generate transparent PNGs with an analog clock for each image in `dir`, where the clock reflect the EXIF time of the image.
 
-* Source images must be in a directory called "photos". They will not be modified.
-* Clock images will be generated in a directory called "clocks" and named like the source images, with ".png" appended.
-* The "clocks" folder must exist, the script will not create it.
-* The script must be run in the parent folder of "photos" and "clocks".
-* The clock images will be 500x500 pixels large, to be scaled down at leisure.
+Refer to the output of `timelapse-tool.py <cmd> -h` for additional parameters.
 
-Oh, no error checking either. See, I was only going to use this for one single project ;)
+The output directories can easily be turned into a video by an AviSynth function similar to this:
 
+```
+function timelapse(string dir, int end)
+{
+	images = ImageSource(file=dir+"/%04d.jpg", start=0, end=end, fps=30).TurnLeft().LanczosResize(832, 1248)
+	clocks = ImageSource(file=dir+"/clocks/%04d.png", start=0, end=end, fps=30, pixel_type="RGB32").LanczosResize(50, 50).ShowAlpha()
+	return Overlay(images, BlankClip(clocks), 750, 1164, clocks, output="YV24")
+}
+```
 
 Multi-angle timelapse videos
 ============================
+
+The following tools require [Python 2.x](http://www.python.org/), [PIL](http://www.pythonware.com/products/pil/) and [ImageMagick](http://www.imagemagick.org/script/index.php) to work. Their functionality is in dire need of a rewrite and integration into timelapse-tool.py - pull requests welcome!
 
 So you recorded something using multiple cameras at once and want to make one video of it. Problem: All your cameras run on separate clocks, and these clocks are neither in sync nor will the cameras all shoot at the same instant or even at the precisely same interval. They probably lost some frames (e.g. due to battery or memory card swaps or because they couldn't focus a specific frame) and the lost frames are all at different times.
 
